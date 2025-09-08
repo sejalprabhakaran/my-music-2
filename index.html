@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sejal's Music Collection - Part 2</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
+            color: #fff;
+            margin: 0;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            color: #ffd93d;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+        
+        .search-box {
+            margin: 20px 0;
+            padding: 15px;
+            width: 100%;
+            max-width: 500px;
+            border: none;
+            border-radius: 50px;
+            font-size: 1rem;
+            background: rgba(255, 255, 255, 0.9);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .songs-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .song-card {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 15px;
+            transition: transform 0.3s ease, background 0.3s ease;
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .song-card:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-5px);
+        }
+        
+        .song-title {
+            font-weight: bold;
+            color: #6bcbef;
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+        }
+        
+        audio {
+            width: 100%;
+            margin-top: 10px;
+            border-radius: 30px;
+            background: rgba(0, 0, 0, 0.3);
+        }
+        
+        audio::-webkit-media-controls-panel {
+            background: rgba(0, 0, 0, 0.5);
+        }
+        
+        .footer {
+            text-align: center;
+            margin-top: 40px;
+            padding: 20px;
+            font-size: 0.9rem;
+            color: #aaa;
+        }
+        
+        @media (max-width: 768px) {
+            .songs-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🎵 Sejal's Music Collection - Part 2</h1>
+            <p>Enjoy more of your favorite Bollywood songs!</p>
+            <input type="text" id="searchInput" class="search-box" placeholder="Search for songs..." onkeyup="searchSongs()">
+        </header>
+        
+        <div class="songs-grid" id="songsContainer">
+            <!-- Songs will be dynamically added here -->
+        </div>
+        
+        <div class="footer">
+            <p>Created with ❤️ by Sejal | Hosted on GitHub Pages</p>
+        </div>
+    </div>
+
+    <script>
+        // Your songs list for my-music-2
+        const songs = [
+            "Gerua.mp3",
+            "Get Ready To Fight Again.mp3",
+            "Get Ready To Fight Reloaded.mp3",
+            "Get Ready To Fight.mp3",
+            "Ghoomar.mp3",
+            "Gira Gira Gira.mp3",
+            "Goa Beach.mp3",
+            "Gold Tamba.mp3",
+            "Gori Gori O Banki Chhori.mp3",
+            "Haal Kya Hai.mp3",
+            "Haare Haare Haare.mp3",
+            "Hadh Kerdi Aapne.mp3",
+            "Hai La Hai La Hua Hua.mp3",
+            "Haji Ali.mp3",
+            "Hamara Hal Na Pucho.mp3",
+            "Hamari Adhuri Kahani.mp3",
+            "Hamari Shaadi Mein.mp3",
+            "Hamdard.mp3",
+            "Hangover.mp3",
+            "Har Kisi Ko.mp3",
+            "Haseeno Ka Deewana.mp3",
+            "Hasi (2).mp3",
+            "Hasi.mp3",
+            "Hathon Mein Aa Gaya Romaal.mp3",
+            "Hawaon Ne Yeh Kaha.mp3",
+            "Hawayein.mp3",
+            "Her Kise Ko Nahin Milta.mp3",
+            "Hua Hain Aaj Pehli Baar.mp3",
+            "Hui Aankh Nam.mp3",
+            "Hum Dono Do Premi.mp3",
+            "Hum Mar Jayenge.mp3",
+            "Hum Na Tode.mp3",
+            "Hum Nahi Sudhrenge(WebMusicin.In).mp3",
+            "Hum Pyaar Hain Tumhare.mp3",
+            "Hum Pyar Karte Hain.mp3",
+            "Hum Unse Mohabbat Kar Ke.mp3",
+            "Hume Tumse Pyaar Kitna.mp3",
+            "Humein Tumse Pyaar Kitna.mp3",
+            "Humko Sirf Tumse.mp3",
+            "Idher Chala Mein Udhar Chala.mp3",
+            "Ik Mulaqaat.mp3",
+            "Ik Rasta Hai Zindagi.mp3",
+            "Illegal Weapon.mp3",
+            "Ilu Ilu.mp3",
+            "In Panchiyon.mp3",
+            "Ishq Mohabbat.mp3",
+            "Isse Pehle Ke Yaad Tu Aaye.mp3",
+            "Its Magic.mp3",
+            "Jaam Woh Hai Jo Bhar Ke Chalakta Hai.mp3",
+            "Jaane Kyon Log Mohabbat Kya Karte Hein.mp3",
+            "Jab Se Tumhein Dekha Sanam.mp3",
+            "Jab Soona Soona Lage.mp3",
+            "Jadu Hai Nasha Hai.mp3",
+            "Jal Rahin Hain.mp3",
+            "Janam Janam.mp3",
+            "Jano Meri Jano.mp3",
+            "Jay Jaykara.mp3",
+            "Jeena Marna.mp3",
+            "Jeeye To Jeeye Kaise.mp3",
+            "Jiska Mujhe Tha Intezaar.mp3",
+            "Jiyo Re Bahubali.mp3",
+            "Jo Tu Na Mila.mp3",
+            "Joganiyan.mp3",
+            "Jub Hum Jawan Honge.mp3",
+            "Kabhi Jo Bholna Chahon.mp3",
+            "Kahani Suno.mp3",
+            "Kaise Hua.mp3",
+            "Kali Kamli Wala Mera Yaar.mp3",
+            "Kangana Tera Ni.mp3",
+            "Kaun Hain Voh.mp3",
+            "Kehdo Ke Tum Ho Meri.mp3",
+            "Kehndi Hundi Si Chan Tak Raah Bana De.mp3",
+            "Kehta Hai Kabutar.mp3",
+            "Khalibali.mp3",
+            "Khalnayak Hai Tu.mp3",
+            "Kheech Meri Photo.mp3",
+            "Khoya Hain.mp3",
+            "Khoya Khoya.mp3",
+            "Kitabein Bahut Si.mp3",
+            "Kitni Hasrat Hai Humein.mp3",
+            "Kiya Kiya.mp3",
+            "Koi Tumsa Nahi.mp3",
+            "Kola Laka Vellari.mp3",
+            "Kuch To Hai.mp3",
+            "Lagan Lagi.mp3",
+            "Lo Safar.mp3",
+            "Lut Jaaon Lut Jaaon.mp3",
+            "Maar Dala.mp3",
+            "Maata Maata.mp3",
+            "Maharaja.mp3",
+            "Main Agar Kahoon.mp3",
+            "Main Dair Karta Nahin.mp3",
+            "Main Hoon Hero Tera.mp3",
+            "Main Nikla Gaddi Leke.mp3",
+            "Mamta Se Bhari.mp3",
+            "Mann Mera.mp3",
+            "Manohari.mp3",
+            "MashAllah.mp3",
+            "Mein Teri Mohabbat Mein.mp3",
+            "Mera Dil Bhi Kitna Pagal Hai.mp3",
+            "Mera Intkam Dekhegi.mp3",
+            "Mera Pyaara Mukhda.mp3",
+            "Mera Pyar Tera Pyar.mp3",
+            "Mere Dil Ko Tere Dil Ki Zaroorat Hai.mp3",
+            "Mere Dushman Mere Bhai.mp3",
+            "Mere Khayalon Ki.mp3",
+            "Mere Naseeb Mein.mp3",
+            "Mere Sapnon Ki Rani.mp3",
+            "Milan Abhi Aadha Adhuraa Hai.mp3",
+            "Mohabbat Barsa De.mp3",
+            "Mohabbat Ki Nahi Jaati.mp3",
+            "Mohabbat Se Jiye Jo Hum.mp3",
+            "Mujhe Haq Hai.mp3",
+            "Mujhe Kuch Tumse Hai Kehna.mp3",
+            "Musafir Jaane Wale.mp3",
+            "Na Kajre Ki.mp3",
+            "Naam E Wafa.mp3",
+            "Naina Barse Rim Jhim.mp3",
+            "Nashe Si Chadh Gayi.mp3",
+            "O Hansini.mp3",
+            "O Khuda.mp3",
+            "O Mere Khwabon Ke Shehzade.mp3",
+            "O Saathi Re Female.mp3",
+            "O Saathi Re.mp3",
+            "O Saathi.mp3",
+            "Odhni Odhke.mp3",
+            "Oonchi Oonchi Baaton Se.mp3",
+            "Oye Raju.mp3",
+            "Pal.mp3",
+            "Party All Night.mp3",
+            "Pathar Ke Sanam.mp3",
+            "Phir Bhi Tumko Chaahungi.mp3",
+            "Phir Bhi Tumko Chahunga.mp3",
+            "Pyaar Ho Jayega.mp3",
+            "Pyaar Ka Anjaam.mp3",
+            "Pyaar Ki Kahani.mp3",
+            "Pyaar Ki Raahein.mp3",
+            "Pyaar Tune Kya Kiya.mp3",
+            "Pyaar Zindagi Hai.mp3",
+            "Pyar Diwana Hota Hai.mp3",
+            "Pyar Do Pyar Lo.mp3",
+            "Pyar Hamara Amar Rahega.mp3",
+            "Pyar Kiya To Nibhana.mp3",
+            "Qaafirana.mp3",
+            "Qayamat se pehle qayamat hai yaaro.mp3",
+            "Raah Main Unse Mulaqat Ho Gayee.mp3",
+            "Raat Bhar.mp3",
+            "Raataan Lambiyan.mp3",
+            "i am a rider.mp3",
+            "jeeyen to jeeyen kaise.mp3"
+        ];
+
+        // Function to display songs
+        function displaySongs(songsList) {
+            const container = document.getElementById('songsContainer');
+            container.innerHTML = '';
+            
+            songsList.forEach(song => {
+                const songCard = document.createElement('div');
+                songCard.className = 'song-card';
+                
+                const songTitle = document.createElement('div');
+                songTitle.className = 'song-title';
+                songTitle.textContent = song.replace('.mp3', '');
+                
+                const audioPlayer = document.createElement('audio');
+                audioPlayer.controls = true;
+                audioPlayer.src = `music/${song}`;
+                audioPlayer.preload = 'metadata';
+                
+                songCard.appendChild(songTitle);
+                songCard.appendChild(audioPlayer);
+                container.appendChild(songCard);
+            });
+        }
+
+        // Function to search songs
+        function searchSongs() {
+            const searchText = document.getElementById('searchInput').value.toLowerCase();
+            const filteredSongs = songs.filter(song => 
+                song.toLowerCase().includes(searchText)
+            );
+            displaySongs(filteredSongs);
+        }
+
+        // Initial display of all songs
+        displaySongs(songs);
+    </script>
+</body>
+</html>
